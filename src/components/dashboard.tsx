@@ -261,7 +261,7 @@ export default function Dashboard({ rows }: DashboardProps) {
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                   <XAxis dataKey="month" tickLine={false} axisLine={false} />
                   <YAxis tickFormatter={(value) => `$${value / 1000}k`} tickLine={false} axisLine={false} />
-                  <Tooltip formatter={(value: number) => formatCurrencyFull(value)} />
+                  <Tooltip formatter={(value) => formatCurrencyFull(Number(Array.isArray(value) ? value[0] : value ?? 0))} />
                   <Line
                     type="monotone"
                     dataKey="revenue"
@@ -284,7 +284,7 @@ export default function Dashboard({ rows }: DashboardProps) {
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                   <XAxis dataKey="month" tickLine={false} axisLine={false} />
                   <YAxis tickFormatter={(value) => `$${value / 1000}k`} tickLine={false} axisLine={false} />
-                  <Tooltip formatter={(value: number) => formatCurrencyFull(value)} />
+                  <Tooltip formatter={(value) => formatCurrencyFull(Number(Array.isArray(value) ? value[0] : value ?? 0))} />
                   <Bar dataKey="plan" fill="#cbd5e1" radius={[8, 8, 0, 0]} />
                   <Bar dataKey="actual" fill="#4c62e9" radius={[8, 8, 0, 0]} />
                 </BarChart>
@@ -312,7 +312,7 @@ export default function Dashboard({ rows }: DashboardProps) {
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis dataKey="month" tickLine={false} axisLine={false} />
                 <YAxis tickFormatter={(value) => `${value}%`} tickLine={false} axisLine={false} />
-                <Tooltip formatter={(value: number) => formatPercent(value)} />
+                <Tooltip formatter={(value) => formatPercent(Number(Array.isArray(value) ? value[0] : value ?? 0))} />
                 <Line
                   type="monotone"
                   dataKey="growth"
