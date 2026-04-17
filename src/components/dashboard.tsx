@@ -54,16 +54,16 @@ function KPI({
   icon: React.ReactNode;
 }) {
   const trendClass =
-    trend === "up" ? "text-emerald-600" : trend === "down" ? "text-rose-600" : "text-slate-500";
+    trend === "up" ? "text-[#629A93]" : trend === "down" ? "text-[#103249]" : "text-[#558981]";
   const TrendIcon = trend === "up" ? ArrowUpRight : trend === "down" ? ArrowDownRight : Landmark;
 
   return (
-    <article className="dashboard-card p-5 ring-1 ring-slate-100">
+    <article className="dashboard-card border border-[#A6C9C7]/40 bg-white/95 p-5 ring-1 ring-[#A6C9C7]/35">
       <div className="flex items-start justify-between">
-        <span className="text-sm font-medium text-slate-500">{label}</span>
-        <span className="rounded-lg bg-brand-50 p-2 text-brand-700">{icon}</span>
+        <span className="text-sm font-medium text-[#558981]">{label}</span>
+        <span className="rounded-lg bg-[#A6C9C7]/25 p-2 text-[#103249]">{icon}</span>
       </div>
-      <p className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">{formatCurrencyFull(value)}</p>
+      <p className="mt-3 text-2xl font-semibold tracking-tight text-[#103249]">{formatCurrencyFull(value)}</p>
       <p className={`mt-2 inline-flex items-center gap-1 text-sm font-medium ${trendClass}`}>
         <TrendIcon className="h-4 w-4" />
         {delta}
@@ -149,21 +149,23 @@ export default function Dashboard({ rows }: DashboardProps) {
   const netDelta = deltaPct(metrics.netIncome, previousMetrics.netIncome);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-50 p-6 md:p-10">
+    <main className="min-h-screen bg-gradient-to-b from-[#103249] to-[#0c2738] p-6 md:p-10">
       <div className="mx-auto max-w-7xl space-y-6">
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-medium uppercase tracking-wide text-brand-600">Finance</p>
-            <h1 className="text-3xl font-semibold tracking-tight text-slate-900">Executive Dashboard</h1>
+            <p className="text-sm font-medium uppercase tracking-wide text-[#A6C9C7]">Finance</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-white">Executive Dashboard</h1>
           </div>
-          <div className="inline-flex w-fit rounded-xl border border-slate-200 bg-white p-1 shadow-soft">
+          <div className="inline-flex w-fit rounded-xl border border-[#A6C9C7]/40 bg-white/95 p-1 shadow-soft">
             {(["Monthly", "QTD", "YTD"] as Period[]).map((option) => (
               <button
                 key={option}
                 type="button"
                 onClick={() => setPeriod(option)}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
-                  period === option ? "bg-brand-600 text-white" : "text-slate-600 hover:bg-slate-100"
+                  period === option
+                    ? "bg-[#629A93] text-white shadow-sm"
+                    : "text-[#558981] hover:bg-[#A6C9C7]/25 hover:text-[#103249]"
                 }`}
               >
                 {option}
@@ -172,48 +174,48 @@ export default function Dashboard({ rows }: DashboardProps) {
           </div>
         </header>
 
-        <section className="dashboard-card p-6">
+        <section className="dashboard-card border border-[#A6C9C7]/35 bg-white/95 p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-medium text-slate-500">Revenue progress ({period})</p>
-              <p className="mt-1 text-2xl font-semibold text-slate-900">
+              <p className="text-sm font-medium text-[#558981]">Revenue progress ({period})</p>
+              <p className="mt-1 text-2xl font-semibold text-[#103249]">
                 {formatCurrencyFull(metrics.revenue)}{" "}
-                <span className="text-base text-slate-400">/ {formatCurrencyFull(metrics.planRevenue)}</span>
+                <span className="text-base text-[#558981]/75">/ {formatCurrencyFull(metrics.planRevenue)}</span>
               </p>
             </div>
-            <span className="rounded-full bg-brand-50 px-3 py-1 text-sm font-semibold text-brand-700">{progressPct}%</span>
+            <span className="rounded-full bg-[#A6C9C7]/30 px-3 py-1 text-sm font-semibold text-[#103249]">{progressPct}%</span>
           </div>
-          <div className="mt-4 h-3 rounded-full bg-slate-200">
+          <div className="mt-4 h-3 rounded-full bg-[#A6C9C7]/35">
             <div
-              className="h-3 rounded-full bg-gradient-to-r from-brand-500 to-brand-700 transition-all"
+              className="h-3 rounded-full bg-gradient-to-r from-[#629A93] to-[#558981] transition-all"
               style={{ width: `${progressPct}%` }}
             />
           </div>
         </section>
 
-        <section className="dashboard-card bg-gradient-to-r from-white to-brand-50/50 p-6">
-          <h2 className="text-base font-semibold text-slate-900">Executive Summary</h2>
-          <p className="mt-1 text-sm text-slate-600">
+        <section className="dashboard-card border border-[#A6C9C7]/35 bg-gradient-to-r from-white/95 to-[#A6C9C7]/25 p-6">
+          <h2 className="text-base font-semibold text-[#103249]">Executive Summary</h2>
+          <p className="mt-1 text-sm text-[#558981]">
             {period} performance shows {formatCurrency(metrics.revenue)} in revenue against{" "}
             {formatCurrency(metrics.planRevenue)} plan, a{" "}
-            <span className={variance >= 0 ? "font-semibold text-emerald-600" : "font-semibold text-rose-600"}>
+            <span className={variance >= 0 ? "font-semibold text-[#629A93]" : "font-semibold text-[#103249]"}>
               {variance >= 0 ? "+" : "-"}
               {formatCurrency(Math.abs(variance))}
             </span>{" "}
             variance.
           </p>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Gross Margin</p>
-              <p className="mt-1 text-xl font-semibold text-slate-900">{formatPercent(grossMargin)}</p>
+            <div className="rounded-xl border border-[#A6C9C7]/45 bg-white p-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-[#558981]">Gross Margin</p>
+              <p className="mt-1 text-xl font-semibold text-[#103249]">{formatPercent(grossMargin)}</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Net Margin</p>
-              <p className="mt-1 text-xl font-semibold text-slate-900">{formatPercent(netMargin)}</p>
+            <div className="rounded-xl border border-[#A6C9C7]/45 bg-white p-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-[#558981]">Net Margin</p>
+              <p className="mt-1 text-xl font-semibold text-[#103249]">{formatPercent(netMargin)}</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-slate-500">COR / Opex Ratio</p>
-              <p className="mt-1 text-xl font-semibold text-slate-900">
+            <div className="rounded-xl border border-[#A6C9C7]/45 bg-white p-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-[#558981]">COR / Opex Ratio</p>
+              <p className="mt-1 text-xl font-semibold text-[#103249]">
                 {formatPercent(corRatio)} / {formatPercent(opexRatio)}
               </p>
             </div>
@@ -252,22 +254,22 @@ export default function Dashboard({ rows }: DashboardProps) {
         </section>
 
         <section className="grid gap-5 xl:grid-cols-5">
-          <article className="dashboard-card p-5 xl:col-span-3">
-            <h2 className="text-base font-semibold text-slate-900">Revenue Over Time</h2>
-            <p className="mb-4 mt-1 text-sm text-slate-500">Monthly actuals with a smooth long-term growth trend.</p>
+          <article className="dashboard-card border border-[#A6C9C7]/35 bg-white/95 p-5 xl:col-span-3">
+            <h2 className="text-base font-semibold text-[#103249]">Revenue Over Time</h2>
+            <p className="mb-4 mt-1 text-sm text-[#558981]">Monthly actuals with a smooth long-term growth trend.</p>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={revenueTrend}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#A6C9C7" strokeOpacity={0.45} />
                   <XAxis dataKey="month" tickLine={false} axisLine={false} />
                   <YAxis tickFormatter={(value) => `$${value / 1000}k`} tickLine={false} axisLine={false} />
                   <Tooltip formatter={(value) => formatCurrencyFull(Number(Array.isArray(value) ? value[0] : value ?? 0))} />
                   <Line
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#4c62e9"
+                    stroke="#629A93"
                     strokeWidth={3}
-                    dot={{ fill: "#4c62e9", r: 3 }}
+                    dot={{ fill: "#629A93", r: 3 }}
                     activeDot={{ r: 6 }}
                   />
                 </LineChart>
@@ -275,26 +277,26 @@ export default function Dashboard({ rows }: DashboardProps) {
             </div>
           </article>
 
-          <article className="dashboard-card p-5 xl:col-span-2">
-            <h2 className="text-base font-semibold text-slate-900">Actual vs Plan</h2>
-            <p className="mb-4 mt-1 text-sm text-slate-500">Actual revenue versus plan for the latest 6 months.</p>
+          <article className="dashboard-card border border-[#A6C9C7]/35 bg-white/95 p-5 xl:col-span-2">
+            <h2 className="text-base font-semibold text-[#103249]">Actual vs Plan</h2>
+            <p className="mb-4 mt-1 text-sm text-[#558981]">Actual revenue versus plan for the latest 6 months.</p>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={planVsActual} barGap={8}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#A6C9C7" strokeOpacity={0.45} vertical={false} />
                   <XAxis dataKey="month" tickLine={false} axisLine={false} />
                   <YAxis tickFormatter={(value) => `$${value / 1000}k`} tickLine={false} axisLine={false} />
                   <Tooltip formatter={(value) => formatCurrencyFull(Number(Array.isArray(value) ? value[0] : value ?? 0))} />
-                  <Bar dataKey="plan" fill="#cbd5e1" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="actual" fill="#4c62e9" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="plan" fill="#A6C9C7" fillOpacity={0.65} radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="actual" fill="#629A93" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm">
-              <p className="inline-flex items-center gap-2 font-medium text-slate-700">
+            <div className="mt-3 rounded-lg border border-[#A6C9C7]/45 bg-[#A6C9C7]/20 p-3 text-sm">
+              <p className="inline-flex items-center gap-2 font-medium text-[#103249]">
                 <BanknoteArrowDown className="h-4 w-4" />
                 Current variance:{" "}
-                <span className={variance >= 0 ? "text-emerald-600" : "text-rose-600"}>
+                <span className={variance >= 0 ? "text-[#629A93]" : "text-[#103249]"}>
                   {variance >= 0 ? "+" : "-"}
                   {formatCurrencyFull(Math.abs(variance))}
                 </span>
@@ -303,22 +305,22 @@ export default function Dashboard({ rows }: DashboardProps) {
           </article>
         </section>
 
-        <section className="dashboard-card p-5">
-          <h2 className="text-base font-semibold text-slate-900">Revenue Growth Over Time</h2>
-          <p className="mb-4 mt-1 text-sm text-slate-500">Month-over-month revenue growth trend.</p>
+        <section className="dashboard-card border border-[#A6C9C7]/35 bg-white/95 p-5">
+          <h2 className="text-base font-semibold text-[#103249]">Revenue Growth Over Time</h2>
+          <p className="mb-4 mt-1 text-sm text-[#558981]">Month-over-month revenue growth trend.</p>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={revenueGrowthTrend}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#A6C9C7" strokeOpacity={0.45} />
                 <XAxis dataKey="month" tickLine={false} axisLine={false} />
                 <YAxis tickFormatter={(value) => `${value}%`} tickLine={false} axisLine={false} />
                 <Tooltip formatter={(value) => formatPercent(Number(Array.isArray(value) ? value[0] : value ?? 0))} />
                 <Line
                   type="monotone"
                   dataKey="growth"
-                  stroke="#16a34a"
+                  stroke="#558981"
                   strokeWidth={3}
-                  dot={{ fill: "#16a34a", r: 3 }}
+                  dot={{ fill: "#558981", r: 3 }}
                   activeDot={{ r: 6 }}
                 />
               </LineChart>
