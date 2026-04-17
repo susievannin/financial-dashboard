@@ -151,10 +151,20 @@ export default function Dashboard({ rows }: DashboardProps) {
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#103249] to-[#0c2738] p-6 md:p-10">
       <div className="mx-auto max-w-7xl space-y-6">
-        <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-wide text-[#A6C9C7]">Finance</p>
-            <h1 className="text-3xl font-semibold tracking-tight text-white">Executive Dashboard</h1>
+        <header className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="flex w-full min-w-0 flex-col items-start gap-3">
+            <img
+              src="/logo.png"
+              alt="Vannin"
+              className="h-12 w-auto shrink-0 object-contain object-left"
+              width={240}
+              height={48}
+              fetchPriority="high"
+            />
+            <div className="min-w-0">
+              <p className="text-sm font-medium uppercase tracking-wide text-[#A6C9C7]">Finance</p>
+              <h1 className="text-3xl font-semibold tracking-tight text-white">Executive Dashboard</h1>
+            </div>
           </div>
           <div className="inline-flex w-fit rounded-xl border border-[#A6C9C7]/40 bg-white/95 p-1 shadow-soft">
             {(["Monthly", "QTD", "YTD"] as Period[]).map((option) => (
