@@ -8,6 +8,12 @@ export type FinanceRow = {
 
 export type Period = "Monthly" | "QTD" | "YTD";
 
+/** Calendar month in local time, `month` is 0–11 (Date.prototype.getMonth()). */
+export type YearMonth = {
+  year: number;
+  month: number;
+};
+
 export type Totals = {
   revenue: number;
   cor: number;
@@ -93,7 +99,63 @@ export function parseFinanceCsv(csvText: string): FinanceRow[] {
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
 
-export function getFilteredRows(rows: FinanceRow[], period: Period): FinanceRow[] {
+export function yearMonthFromRowDate(dateValue: string): YearMonth {
+  const date = new Date(dateValue);
+  return { year: date.getFullYear(), month: date.getMonth() };
+}
+
+/** Latest month (by row order) that has reported actual revenue. Falls back to the last row if none. */
+export function defaultMonthlySelection(rows: FinanceRow[]): YearMonth | null {
+  if (rows.length === 0) {
+    return null;
+  }
+
+  for (let i = rows.length - 1; i >= 0; i -= 1) {
+    if (rows[i].revenue > 0) {
+      return yearMonthFromRowDate(rows[i].date);
+    }
+  }
+
+  return yearMonthFromRowDate(rows[rows.length - 1].date);
+}
+
+/** Latest row date for default Monthly selection (latest month with actual revenue). */
+export function defaultMonthlyRowDate(rows: FinanceRow[]): string | null {
+  const target = defaultMonthlySelection(rows);
+  if (!target) {
+    return null;
+  }
+
+  for (let i = rows.length - 1; i >= 0; i -= 1) {
+    const date = new Date(rows[i].date);
+    if (date.getFullYear() === target.year && date.getMonth() === target.month) {
+      return rows[i].date;
+    }
+  }
+
+  return rows[rows.length - 1]?.date ?? null;
+}
+
+export function formatMonthYearLongFromParts(year: number, month: number): string {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    year: "numeric"
+  }).format(new Date(year, month, 1));
+}
+
+export function rowHasActualRevenue(row: FinanceRow): boolean {
+  return row.revenue > 0;
+}
+
+/**
+ * @param monthlySelection — When `period` is Monthly, filter to this calendar month.
+ *   If omitted or null, uses {@link defaultMonthlySelection} (latest month with actual revenue).
+ */
+export function getFilteredRows(
+  rows: FinanceRow[],
+  period: Period,
+  monthlySelection?: YearMonth | null
+): FinanceRow[] {
   if (rows.length === 0) {
     return [];
   }
@@ -119,9 +181,14 @@ export function getFilteredRows(rows: FinanceRow[], period: Period): FinanceRow[
     });
   }
 
+  const target = monthlySelection ?? defaultMonthlySelection(rows);
+  if (!target) {
+    return [];
+  }
+
   return rows.filter((row) => {
     const date = new Date(row.date);
-    return date.getFullYear() === latestYear && date.getMonth() === latestMonth;
+    return date.getFullYear() === target.year && date.getMonth() === target.month;
   });
 }
 
